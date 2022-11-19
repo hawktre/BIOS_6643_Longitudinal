@@ -16,7 +16,7 @@ library(lubridate)
 
 
 # Read in and clean avalanche data --------------------------------------
-avalanche <- read_csv(here("DataRaw/CAIC_avalanches_2008-10-01_2022-10-17.csv")) %>% 
+avalanche <- read_csv(here("project/DataRaw/CAIC_avalanches_2008-10-01_2022-10-17.csv")) %>% 
   janitor::clean_names()%>% 
   drop_na(rsize, dsize, bc_zone) %>% 
   filter(!rsize == "U",
@@ -30,8 +30,11 @@ avalanche <- avalanche %>%
          day = day(date),
          rsize = factor(rsize, levels = unique(avalanche$rsize), ordered = T))
 
+#Write out the avalanche data
+write_csv(avalanche, here("project/DataProcessed/avalanche_dat_cleaned.csv"))
+
 # Read in and clean weather data --------------------------------------
-setwd(here("DataRaw/Project"))
+setwd(here("project/DataRaw"))
 
 for (file in list.files()){
   
@@ -75,7 +78,8 @@ weather_dat <- weather_dat %>%
          "day_precip" = Precipitation.Increment..in.)
 
 
-
+#Write out the weather data
+write_csv(weather_dat, here("project/DataProcessed/weather_dat_merged.csv"))
 
 # Avalanche Data Visualizations -------------------------------------------
 #Total avalanches over time by zone
